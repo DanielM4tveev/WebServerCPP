@@ -17,7 +17,7 @@ void handle_request(int client_socket) {
     // Открываем HTML файл
     int file = open(file_path, O_RDONLY);
     if (file < 0) {
-        perror("Ошибка при открытии файла");
+        perror("ERROR 400. File not opened on doesn't exist");
         close(client_socket);
         return;
     }
@@ -44,7 +44,7 @@ int main() {
     // Создаем сокет
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket < 0) {
-        perror("Ошибка создания сокета");
+        perror("Error creation socket");
         exit(EXIT_FAILURE);
     }
 
@@ -62,12 +62,12 @@ int main() {
 
     // Слушаем входящие соединения
     if (listen(server_socket, 5) < 0) {
-        perror("Ошибка прослушивания сокета");
+        perror("Error listening socket");
         close(server_socket);
         exit(EXIT_FAILURE);
     }
 
-    printf("HTTP сервер запущен на порту %d\n", PORT);
+    printf("HTTP Server loaded in port %d\n", PORT);
 
     // Основной цикл обработки запросов
     while (1) {
