@@ -20,12 +20,12 @@ void handle_request(int client_socket, struct sockaddr_in client_addr) {
     inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
     
     // Выводим информацию о клиенте
-    printf("Получен запрос от клиента IP: %s, Порт: %d\n", client_ip, ntohs(client_addr.sin_port));
+    printf("Request received from client IP: %s, Port: %d\n", client_ip, ntohs(client_addr.sin_port));
     
     // Читаем запрос и ищем заголовок User-Agent
     ssize_t bytes_received = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
     if (bytes_received <= 0) {
-        perror("Ошибка при получении данных");
+        perror("Error receiving data");
         close(client_socket);
         return;
     }
@@ -42,13 +42,13 @@ void handle_request(int client_socket, struct sockaddr_in client_addr) {
         }
         printf("User-Agent: %s\n", user_agent);
     } else {
-        printf("User-Agent: Не найдено\n");
+        printf("User-Agent: Not found\n");
     }
 
     // Открываем HTML файл
     int file = open(file_path, O_RDONLY);
     if (file < 0) {
-        perror("Ошибка при открытии файла");
+        perror("Error opening file");
         close(client_socket);
         return;
     }
@@ -75,7 +75,7 @@ int main() {
     // Создаем сокет
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket < 0) {
-        perror("Ошибка создания сокета");
+        perror("Error creating socket");
         exit(EXIT_FAILURE);
     }
 
@@ -86,26 +86,26 @@ int main() {
 
     // Привязываем сокет к адресу и порту
     if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-        perror("Ошибка привязки сокета");
+        perror("Error binding socket");
         close(server_socket);
         exit(EXIT_FAILURE);
     }
 
     // Слушаем входящие соединения
     if (listen(server_socket, 5) < 0) {
-        perror("Ошибка прослушивания сокета");
+        perror("Error listening on socket");
         close(server_socket);
         exit(EXIT_FAILURE);
     }
 
-    printf("HTTP сервер запущен на порту %d\n", PORT);
+    printf("HTTP server running on port %d\n", PORT);
 
     // Основной цикл обработки запросов
     while (1) {
         // Принимаем входящее соединение
         client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
         if (client_socket < 0) {
-            perror("Ошибка приема соединения");
+            perror("Error accepting connection");
             continue;
         }
 
