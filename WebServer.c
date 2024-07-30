@@ -55,7 +55,7 @@ int main() {
 
     // Привязываем сокет к адресу и порту
     if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-        perror("Ошибка привязки сокета");
+        perror("Error connection socket");
         close(server_socket);
         exit(EXIT_FAILURE);
     }
@@ -74,7 +74,7 @@ int main() {
         // Принимаем входящее соединение
         client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
         if (client_socket < 0) {
-            perror("Ошибка приема соединения");
+            perror("Error handshake connection");
             continue;
         }
 
