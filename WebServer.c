@@ -5,7 +5,7 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 
-#define PORT 8088               // Порт, на котором сервер будет слушать входящие соединения
+#define PORT 8080               // Порт, на котором сервер будет слушать входящие соединения
 #define BUFFER_SIZE 1024       // Размер буфера для чтения данных
 #define USER_AGENT_HEADER "User-Agent: " // Заголовок, который мы будем искать в запросе
 
