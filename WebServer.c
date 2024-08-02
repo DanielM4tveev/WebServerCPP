@@ -6,7 +6,7 @@
 #include <fcntl.h>
 
 #define PORT 8080               // Порт, на котором сервер будет слушать входящие соединения
-#define BUFFER_SIZE 1024       // Размер буфера для чтения данных
+#define BUFFER_SIZE 4096       // Размер буфера для чтения данных
 #define USER_AGENT_HEADER "User-Agent: " // Заголовок, который мы будем искать в запросе
 
 // Функция для определения MIME-типа в зависимости от расширения файла
@@ -88,7 +88,7 @@ void handle_request(int client_socket, struct sockaddr_in client_addr) {
     }
 
     // Отправляем заголовок ответа клиенту
-    sprintf(response_header, "HTTP/1.1 200 OK\r\nContent-Type: %s\r\n\r\n", mime_type);
+    snprintf(response_header, sizeof(response_header), "HTTP/1.1 200 OK\r\nContent-Type: %s\r\n\r\n", mime_type);
     send(client_socket, response_header, strlen(response_header), 0);
 
     // Отправляем содержимое файла клиенту
