@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ecf0f1;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+        .login-container input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+        }
+        .login-container button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+            font-size: 16px;
+        }
+        .login-container button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <input type="password" id="password" placeholder="Enter password" />
+        <button onclick="checkPassword()">Login</button>
+        <p id="error-message" style="color: red; display: none;">Incorrect password</p>
+    </div>
+    <script>
+        const correctPassword = 'Ma4p4p2941'; // Замените 'yourpassword' на ваш пароль
+
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+            if (passwordInput === correctPassword) {
+                window.location.href = 'admin.html'; // Перенаправление на админ панель
+            } else {
+                document.getElementById('error-message').style.display = 'block'; // Показываем сообщение об ошибке
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,11 +1,3 @@
-/*
-TODO
-1. Добавить панель администратора по адресу http://ip:8088/admin
-2. Добавить поддержку пароля который будет шифроваться с помощью системы base64 в отдельном файле
-3. Добавить обработку ошибок
-4. Добавить обработку запросов с других сайтов
-5. Добавить обработку POST запросов
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,68 +5,54 @@ TODO
 #include <arpa/inet.h>
 #include <fcntl.h>
 
-#define PORT 8080               // Порт, на котором сервер будет слушать входящие соединения
-#define BUFFER_SIZE 4096       // Размер буфера для чтения данных
-#define USER_AGENT_HEADER "User-Agent: " // Заголовок, который мы будем искать в запросе
+#define PORT 8080
+#define BUFFER_SIZE 4096
+#define USER_AGENT_HEADER "User-Agent: "
 
 // Функция для определения MIME-типа в зависимости от расширения файла
 const char* get_mime_type(const char* file_path) {
-    // Проверяем расширение файла и возвращаем соответствующий MIME-тип
     if (strstr(file_path, ".html") != NULL) return "text/html";
     if (strstr(file_path, ".css") != NULL) return "text/css";
     if (strstr(file_path, ".js") != NULL) return "application/javascript";
     if (strstr(file_path, ".png") != NULL) return "image/png";
     if (strstr(file_path, ".jpg") != NULL) return "image/jpeg";
     if (strstr(file_path, ".gif") != NULL) return "image/gif";
-    return "application/octet-stream"; // MIME-тип по умолчанию для неизвестных файлов
+    return "application/octet-stream";
 }
 
 // Функция для обработки запроса от клиента
 void handle_request(int client_socket, struct sockaddr_in client_addr) {
-    char buffer[BUFFER_SIZE];        // Буфер для хранения данных запроса и ответа
-    char response_header[BUFFER_SIZE]; // Заголовок ответа
-    char *file_path = "index.html";  // Путь к файлу, который будет отправлен клиенту по умолчанию
-    char client_ip[INET_ADDRSTRLEN]; // Буфер для хранения IP-адреса клиента
+    char buffer[BUFFER_SIZE];
+    char response_header[BUFFER_SIZE];
+    char *file_path = "index.html";
+    char client_ip[INET_ADDRSTRLEN];
     
-    // Преобразуем IP-адрес клиента в строку для вывода в консоль
     inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
-    
-    // Выводим информацию о клиенте
     printf("Request received from client IP: %s, Port: %d\n", client_ip, ntohs(client_addr.sin_port));
     
-    // Читаем запрос от клиента
     ssize_t bytes_received = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
-    if (bytes_received <= 0) {  // Проверяем, что данные успешно получены
+    if (bytes_received <= 0) {
         perror("Error receiving data");
         close(client_socket);
         return;
     }
     
-    buffer[bytes_received] = '\0'; // Добавляем нуль-терминатор для корректного отображения строки
-
-    // Ищем заголовок User-Agent в запросе
-    char *user_agent = strstr(buffer, USER_AGENT_HEADER);
-    if (user_agent != NULL) {
-        user_agent += strlen(USER_AGENT_HEADER); // Перемещаем указатель после "User-Agent: "
-        char *end_of_line = strstr(user_agent, "\r\n");
-        if (end_of_line != NULL) {
-            *end_of_line = '\0'; // Добавляем нуль-терминатор, чтобы завершить строку
-        }
-        printf("User-Agent: %s\n", user_agent); // Выводим User-Agent в консоль
-    } else {
-        printf("User-Agent: Not found\n"); // Если заголовок не найден
-    }
-
+    buffer[bytes_received] = '\0';
+    
     // Извлекаем путь к запрашиваемому ресурсу из строки запроса
     char *method_end = strstr(buffer, " ");
     if (method_end != NULL) {
         char *path_start = method_end + 1;
         char *path_end = strstr(path_start, " ");
         if (path_end != NULL) {
-            *path_end = '\0'; // Завершаем строку
-            file_path = path_start; // Устанавливаем путь к файлу
+            *path_end = '\0';
+            file_path = path_start;
             if (strcmp(file_path, "/") == 0) {
-                file_path = "index.html"; // По умолчанию отправляем index.html
+                file_path = "index.html";
+            } else if (strcmp(file_path, "/admin") == 0) {
+                file_path = "admin/admin.html"; // Перенаправляем на админ-панель
+            } else if (strncmp(file_path, "/admin/", 7) == 0) {
+                file_path += 7; // Убираем префикс /admin/
             } else {
                 file_path++; // Убираем начальный слэш из пути
             }
@@ -87,7 +65,6 @@ void handle_request(int client_socket, struct sockaddr_in client_addr) {
     // Открываем файл для отправки клиенту
     int file = open(file_path, O_RDONLY);
     if (file < 0) {
-        // Если файл не найден, отправляем ошибку 404
         perror("Error opening file");
         sprintf(response_header, "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\nFile not found");
         send(client_socket, response_header, strlen(response_header), 0);
@@ -115,26 +92,22 @@ int main() {
     struct sockaddr_in server_addr, client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
 
-    // Создаем сокет для сервера
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket < 0) {
         perror("Error creating socket");
         exit(EXIT_FAILURE);
     }
 
-    // Настраиваем адрес и порт для сервера
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(PORT);
 
-    // Привязываем сокет к указанному адресу и порту
     if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
         perror("Error binding socket");
         close(server_socket);
         exit(EXIT_FAILURE);
     }
 
-    // Начинаем слушать входящие соединения
     if (listen(server_socket, 5) < 0) {
         perror("Error listening on socket");
         close(server_socket);
@@ -143,20 +116,16 @@ int main() {
 
     printf("HTTP server running on port %d\n", PORT);
 
-    // Основной цикл обработки запросов
     while (1) {
-        // Принимаем входящее соединение
         client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
         if (client_socket < 0) {
             perror("Error accepting connection");
             continue;
         }
 
-        // Обрабатываем запрос клиента
         handle_request(client_socket, client_addr);
     }
 
-    // Закрываем серверный сокет (это никогда не достигнется в текущей реализации)
     close(server_socket);
     return 0;
 }

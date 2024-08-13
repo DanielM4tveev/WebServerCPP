@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        /* Основной стиль */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Стили для бокового меню */
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            margin: 10px 0;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            padding-left: 10px;
+        }
+
+        /* Стили для основного контента */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Заголовок */
+        .main-content h1 {
+            margin-top: 0;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+
+        /* Стиль для кнопок */
+        .button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: center;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Стили для таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            transition: background-color 0.3s;
+        }
+
+        /* Форма загрузки файла */
+        .file-upload {
+            margin-top: 20px;
+        }
+
+        .file-upload input[type="file"] {
+            margin-right: 10px;
+        }
+
+        .file-upload button {
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .file-upload button:hover {
+            background-color: #d35400;
+        }
+
+        /* Футер */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        /* Темная тема */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #2c3e50;
+                color: #ecf0f1;
+            }
+
+            .sidebar {
+                background-color: #34495e;
+            }
+
+            .sidebar a {
+                color: #ecf0f1;
+            }
+
+            .sidebar a:hover {
+                background-color: #1abc9c;
+            }
+
+            .main-content h1 {
+                color: #ecf0f1;
+            }
+
+            .button {
+                background-color: #3498db;
+            }
+
+            .button:hover {
+                background-color: #2980b9;
+            }
+
+            table th {
+                background-color: #2c3e50;
+                color: #ecf0f1;
+            }
+
+            .file-upload button {
+                background-color: #e67e22;
+            }
+
+            .file-upload button:hover {
+                background-color: #d35400;
+            }
+
+            footer {
+                background-color: #34495e;
+            }
+        }
+
+        /* Светлая тема */
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: #f4f4f4;
+                color: #333;
+            }
+
+            .sidebar {
+                background-color: #2c3e50;
+            }
+
+            .sidebar a {
+                color: #ecf0f1;
+            }
+
+            .sidebar a:hover {
+                background-color: #34495e;
+            }
+
+            .main-content h1 {
+                color: #2c3e50;
+            }
+
+            .button {
+                background-color: #3498db;
+            }
+
+            .button:hover {
+                background-color: #2980b9;
+            }
+
+            table th {
+                background-color: #2c3e50;
+                color: #ecf0f1;
+            }
+
+            .file-upload button {
+                background-color: #e67e22;
+            }
+
+            .file-upload button:hover {
+                background-color: #d35400;
+            }
+
+            footer {
+                background-color: #2c3e50;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="admin-container" style="display: none;">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <a href="#" id="status-link">Status</a>
+            <a href="#" id="file-management-link">File Management</a>
+        </div>
+        <div class="main-content">
+            <div id="status-content">
+                <h1>Server Status</h1>
+                <p id="status-info">Loading...</p>
+                <button class="button" onclick="fetchStatus()">Refresh Status</button>
+            </div>
+            <div id="file-management-content" style="display: none;">
+                <h1>File Management</h1>
+                <div class="file-upload">
+                    <input type="file" id="file-upload" />
+                    <button onclick="uploadFile()">Upload File</button>
+                </div>
+                <table id="file-table">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Size</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- File list will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <footer>
+        &copy; 2024 Admin Panel
+    </footer>
+    <script>
+        // Функция для проверки пароля
+        function checkPassword() {
+            const password = prompt("Please enter the admin password:", "");
+            if (password === null || password !== "root") {
+                alert("Incorrect password. Access denied.");
+                window.location.href = "index.html"; // Перенаправляем на главную страницу
+            } else {
+                document.getElementById('admin-container').style.display = 'block'; // Показываем админ-панель
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkPassword(); // Запускаем проверку пароля при загрузке страницы
+
+            const statusLink = document.getElementById('status-link');
+            const fileManagementLink = document.getElementById('file-management-link');
+            const statusContent = document.getElementById('status-content');
+            const fileManagementContent = document.getElementById('file-management-content');
+            
+            statusLink.addEventListener('click', () => {
+                statusContent.style.display = 'block';
+                fileManagementContent.style.display = 'none';
+            });
+            
+            fileManagementLink.addEventListener('click', () => {
+                statusContent.style.display = 'none';
+                fileManagementContent.style.display = 'block';
+            });
+            
+            fetchStatus(); // Initial fetch
+        });
+
+        function fetchStatus() {
+            fetch('/status')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('status-info').textContent = `Status: ${data.status}`;
+                });
+        }
+
+        function uploadFile() {
+            const fileInput = document.getElementById('file-upload');
+            const file = fileInput.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert('File uploaded successfully');
+                    fileInput.value = ''; // Clear the file input
+                    fetchFileList(); // Refresh file list
+                });
+            } else {
+                alert('No file selected');
+            }
+        }
+
+        function fetchFileList() {
+            fetch('/files')
+                .then(response => response.json())
+                .then(files => {
+                    const fileTableBody = document.querySelector('#file-table tbody');
+                    fileTableBody.innerHTML = ''; // Clear existing rows
+                    files.forEach(file => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${file.name}</td>
+                            <td>${file.size}</td>
+                            <td>
+                                <a href="/files/${file.name}" download>Download</a>
+                                <button onclick="deleteFile('${file.name}')">Delete</button>
+                            </td>
+                        `;
+                        fileTableBody.appendChild(row);
+                    });
+                });
+        }
+
+        function deleteFile(fileName) {
+            fetch(`/delete/${fileName}`, { method: 'DELETE' })
+                .then(response => response.text())
+                .then(result => {
+                    alert('File deleted successfully');
+                    fetchFileList(); // Refresh file list
+                });
+        }
+    </script>
+</body>
+</html>
