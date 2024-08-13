@@ -20,6 +20,12 @@
             width: 250px;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            background-color: #2c3e50;
+            color: #ecf0f1;
             transition: background-color 0.3s;
         }
 
@@ -31,18 +37,22 @@
         .sidebar a {
             display: block;
             text-decoration: none;
+            color: #ecf0f1;
             margin: 10px 0;
             font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
             transition: background-color 0.3s;
         }
 
         .sidebar a:hover {
-            padding-left: 10px;
+            background-color: #34495e;
+            padding-left: 20px;
         }
 
         /* Стили для основного контента */
         .main-content {
-            flex: 1;
+            margin-left: 270px;
             padding: 20px;
         }
 
@@ -88,7 +98,8 @@
         }
 
         th {
-            transition: background-color 0.3s;
+            background-color: #2c3e50;
+            color: #ecf0f1;
         }
 
         /* Форма загрузки файла */
@@ -108,7 +119,6 @@
             cursor: pointer;
             font-size: 16px;
             border-radius: 5px;
-            text-align: center;
             transition: background-color 0.3s;
         }
 
@@ -123,8 +133,9 @@
             text-align: center;
             padding: 10px;
             position: fixed;
-            width: 100%;
+            width: calc(100% - 250px);
             bottom: 0;
+            left: 250px;
         }
 
         /* Темная тема */
@@ -222,6 +233,26 @@
 
             footer {
                 background-color: #2c3e50;
+            }
+        }
+
+        /* Адаптивный дизайн */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                box-shadow: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            footer {
+                width: 100%;
+                left: 0;
+                position: relative;
+                bottom: 0;
             }
         }
     </style>
