@@ -10,49 +10,53 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: #181818;
+            color: #FFFFFF;
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Стили для бокового меню */
-        .sidebar {
-            width: 250px;
+        /* Стили для верхней панели */
+        .topbar {
+            width: 100%;
             padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            background-color: #0B0B0B;
+            color: #FFFFFF;
             position: fixed;
             top: 0;
-            bottom: 0;
             left: 0;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            transition: background-color 0.3s;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .sidebar h2 {
+        .topbar h2 {
             font-size: 20px;
-            margin-bottom: 20px;
+            margin: 0;
         }
 
-        .sidebar a {
-            display: block;
+        .topbar nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .topbar a {
             text-decoration: none;
-            color: #ecf0f1;
-            margin: 10px 0;
+            color: #FFFFFF;
             font-size: 16px;
             padding: 10px;
             border-radius: 5px;
+            background-color: #1A1A1A;
             transition: background-color 0.3s;
         }
 
-        .sidebar a:hover {
-            background-color: #34495e;
-            padding-left: 20px;
+        .topbar a:hover {
+            background-color: #333333;
         }
 
         /* Стили для основного контента */
         .main-content {
-            margin-left: 270px;
+            margin-top: 80px; /* отступ для учета верхней панели */
             padding: 20px;
         }
 
@@ -60,12 +64,12 @@
         .main-content h1 {
             margin-top: 0;
             font-size: 24px;
-            transition: color 0.3s;
+            color: #FFFFFF;
         }
 
         /* Стиль для кнопок */
         .button {
-            background-color: #3498db;
+            background-color: #007ACC;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -78,7 +82,7 @@
         }
 
         .button:hover {
-            background-color: #2980b9;
+            background-color: #005A99;
         }
 
         /* Стили для таблицы */
@@ -89,7 +93,8 @@
         }
 
         table, th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #333333;
+            color: #FFFFFF;
         }
 
         th, td {
@@ -98,8 +103,8 @@
         }
 
         th {
-            background-color: #2c3e50;
-            color: #ecf0f1;
+            background-color: #1A1A1A;
+            color: #FFFFFF;
         }
 
         /* Форма загрузки файла */
@@ -109,10 +114,11 @@
 
         .file-upload input[type="file"] {
             margin-right: 10px;
+            color: #FFFFFF;
         }
 
         .file-upload button {
-            background-color: #e67e22;
+            background-color: #007ACC;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -123,146 +129,30 @@
         }
 
         .file-upload button:hover {
-            background-color: #d35400;
-        }
-
-        /* Футер */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            width: calc(100% - 250px);
-            bottom: 0;
-            left: 250px;
-        }
-
-        /* Темная тема */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #2c3e50;
-                color: #ecf0f1;
-            }
-
-            .sidebar {
-                background-color: #34495e;
-            }
-
-            .sidebar a {
-                color: #ecf0f1;
-            }
-
-            .sidebar a:hover {
-                background-color: #1abc9c;
-            }
-
-            .main-content h1 {
-                color: #ecf0f1;
-            }
-
-            .button {
-                background-color: #3498db;
-            }
-
-            .button:hover {
-                background-color: #2980b9;
-            }
-
-            table th {
-                background-color: #2c3e50;
-                color: #ecf0f1;
-            }
-
-            .file-upload button {
-                background-color: #e67e22;
-            }
-
-            .file-upload button:hover {
-                background-color: #d35400;
-            }
-
-            footer {
-                background-color: #34495e;
-            }
-        }
-
-        /* Светлая тема */
-        @media (prefers-color-scheme: light) {
-            body {
-                background-color: #f4f4f4;
-                color: #333;
-            }
-
-            .sidebar {
-                background-color: #2c3e50;
-            }
-
-            .sidebar a {
-                color: #ecf0f1;
-            }
-
-            .sidebar a:hover {
-                background-color: #34495e;
-            }
-
-            .main-content h1 {
-                color: #2c3e50;
-            }
-
-            .button {
-                background-color: #3498db;
-            }
-
-            .button:hover {
-                background-color: #2980b9;
-            }
-
-            table th {
-                background-color: #2c3e50;
-                color: #ecf0f1;
-            }
-
-            .file-upload button {
-                background-color: #e67e22;
-            }
-
-            .file-upload button:hover {
-                background-color: #d35400;
-            }
-
-            footer {
-                background-color: #2c3e50;
-            }
+            background-color: #005A99;
         }
 
         /* Адаптивный дизайн */
         @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                position: relative;
-                box-shadow: none;
+            .topbar nav {
+                flex-direction: column;
+                gap: 10px;
             }
 
             .main-content {
-                margin-left: 0;
-            }
-
-            footer {
-                width: 100%;
-                left: 0;
-                position: relative;
-                bottom: 0;
+                margin-top: 120px; /* увеличиваем отступ для учета высоты навигации */
             }
         }
     </style>
 </head>
 <body>
     <div class="container" id="admin-container" style="display: none;">
-        <div class="sidebar">
+        <div class="topbar">
             <h2>Admin Panel</h2>
-            <a href="#" id="status-link">Status</a>
-            <a href="#" id="file-management-link">File Management</a>
+            <nav>
+                <a href="#" id="status-link">Status</a>
+                <a href="#" id="file-management-link">File Management</a>
+            </nav>
         </div>
         <div class="main-content">
             <div id="status-content">
@@ -291,9 +181,6 @@
             </div>
         </div>
     </div>
-    <footer>
-        &copy; 2024 Admin Panel
-    </footer>
     <script>
         // Функция для проверки пароля
         function checkPassword() {
